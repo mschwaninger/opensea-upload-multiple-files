@@ -11,7 +11,7 @@ import json
 
 attributlist = []
 attributdict = {} 
-
+data = 0
 def uploadFiles(startItemId, count, mnemonicString, walletPwd):
     statisticCreator()
     global attributdict
@@ -35,26 +35,88 @@ def uploadFiles(startItemId, count, mnemonicString, walletPwd):
     driver.switch_to.window(tabs2[1])
     print('switch tab completed')
 
-    time.sleep(4)
+ 
 
-    createButtonXpath = '//*[@id="__next"]/div[1]/div[1]/nav/ul/div[1]/li[4]/a'
-    wait.until(ExpectedConditions.presence_of_element_located(
-    (By.XPATH, createButtonXpath)))
-    createPage = driver.find_element_by_xpath(createButtonXpath)
-    createPage.click()
-    filePath = 'capricorn_986.png'
-    wait.until(ExpectedConditions.presence_of_element_located((By.XPATH, '//*[@id="media"]')))
-    imageUpload = driver.find_element_by_xpath('//*[@id="media"]')
-    imagePath = os.path.abspath(filePath)
-    imageUpload.send_keys(imagePath)
+    for _data in data: # Iteration over all items in JSON
+        time.sleep(4)
+        createButtonXpath = '//*[@id="__next"]/div[1]/div[1]/nav/ul/div[1]/li[4]/a'
+        wait.until(ExpectedConditions.presence_of_element_located(
+        (By.XPATH, createButtonXpath)))
+        createPage = driver.find_element_by_xpath(createButtonXpath)
+        createPage.click()
 
+        #upload image       
+        filePath = _data['image'] 
+        wait.until(ExpectedConditions.presence_of_element_located((By.XPATH, '//*[@id="media"]')))
+        imageUpload = driver.find_element_by_xpath('//*[@id="media"]')
+        imagePath = os.path.abspath(filePath)
+        imageUpload.send_keys(imagePath)
+        name = driver.find_element_by_xpath('//*[@id="name"]')
+        name.send_keys(_data['name'])
+        description = driver.find_element_by_xpath('//*[@id="description"]')
+        description.send_keys(_data['description'])        
+        collectionName = driver.find_element_by_xpath('//*[@id="__next"]/div[1]/main/div/div/section/div/form/div[5]/div/div/input')
+        collectionName.send_keys(collName)
+        collectionButtonFromListName = '//button[normalize-space()="{}"]'.format(collName)
+        try:
+            wait.until(ExpectedConditions.presence_of_element_located(
+                (By.XPATH, collectionButtonFromListName)))
+            collectionButtonFromList = driver.find_element_by_xpath(collectionButtonFromListName)
+        except:
+            collectionName.send_keys(Keys.CONTROL + "a")
+            collectionName.send_keys(Keys.DELETE)
+            collectionName.send_keys(collName)
+            wait.until(ExpectedConditions.presence_of_element_located(
+                (By.XPATH, collectionButtonFromListName)))
+            collectionButtonFromList = driver.find_element_by_xpath(collectionButtonFromListName)
+        collectionButtonFromList.click()
+        propertiesPlusButton = driver.find_element_by_xpath('//*[@id="__next"]/div[1]/main/div/div/section/div/form/section[1]/div[1]/div/div[2]/button')
+        propertiesPlusButton.click()
+        print('starting properties population')
+        time.sleep(2)        
+        propertyIndex = 0
+        for _attributes in _data['attributes']: 
+            propertyIndex = propertyIndex + 1          
+
+            propDivNum = 3
+            propKeyInputXpath = '/html/body/div[{}]/div/div/div/section/table/tbody/tr[{}]/td[1]/div/div/input'.format(
+                propDivNum, propertyIndex)
+            if len(driver.find_elements_by_xpath(propKeyInputXpath)) <= 0:
+                propDivNum = 2
+                propKeyInputXpath = '/html/body/div[{}]/div/div/div/section/table/tbody/tr[{}]/td[1]/div/div/input'.format(
+                    propDivNum, propertyIndex)
+            if len(driver.find_elements_by_xpath(propKeyInputXpath)) <= 0:
+                propDivNum = 5
+                propKeyInputXpath = '/html/body/div[{}]/div/div/div/section/table/tbody/tr[{}]/td[1]/div/div/input'.format(
+                    propDivNum, propertyIndex)
+
+            propKeyInputXpath = '/html/body/div[{}]/div/div/div/section/table/tbody/tr[{}]/td[1]/div/div/input'.format(propDivNum, propertyIndex)
+            propertiesKey = driver.find_element_by_xpath(propKeyInputXpath)
+            propertiesKey.send_keys(_attributes['trait_type'])
+
+            propValueInputXpath = '/html/body/div[{}]/div/div/div/section/table/tbody/tr[{}]/td[2]/div/div/input'.format(propDivNum, propertyIndex)
+            propertiesValue = driver.find_element_by_xpath(propValueInputXpath)
+            propertiesValue.send_keys(_attributes['value'])           
+                   
+            wait.until(ExpectedConditions.presence_of_element_located((By.XPATH, '//button[normalize-space()="Add more"]')))
+            collectionAddPropButton = driver.find_element_by_xpath('//button[normalize-space()="Add more"]')
+            collectionAddPropButton.click()             
+        propSave = driver.find_element_by_xpath('/html/body/div[{}]/div/div/div/footer/button'.format(propDivNum))
+        propSave.click()    
+        time.sleep(2)   
+        createNFT = driver.find_element_by_xpath('//*[@id="__next"]/div[1]/main/div/div/section/div/form/div/div[1]/span/button')
+        createNFT.click()
+        time.sleep(10)   
+        closeCreateModal = driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[2]/button')
+        closeCreateModal.click()              
     while(True):{}
 
 
 def statisticCreator():
     global attributdict
     global attributlist
-    with open("./metadata.json", "r", encoding="utf-8") as f:
+    global data
+    with open("./build/metadata.json", "r", encoding="utf-8") as f:
         data = json.load(f)
     
     for _data in data: 
@@ -65,7 +127,6 @@ def statisticCreator():
 
     for _attributdict in attributdict.keys(): 
         attributdict[_attributdict] = 100/len(attributlist) * attributlist.count(_attributdict)
-
 
 def signIntoMeta(driver, wait, mnemonicString, walletPwd): 
     tabs2 = driver.window_handles
@@ -140,14 +201,7 @@ def signIntoMeta(driver, wait, mnemonicString, walletPwd):
     print(tabs2)
     sign = driver.find_element_by_xpath('//*[@id="app-content"]/div/div[2]/div/div[3]/button[2]')
     sign.click()
-    time.sleep(4)
 
-    # tabs2 = driver.window_handles
-    # driver.switch_to.window(tabs2[1])
-    # driver.switch_to.window(tabs2[2])
-    # print(tabs2)
-    # print(driver.title)
-    # print('sign into meta completed')
     time.sleep(10) 
 
 if __name__ == '__main__':
