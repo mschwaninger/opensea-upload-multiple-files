@@ -252,21 +252,22 @@ def signIntoMeta(driver, wait, mnemonicString, walletPwd):
     time.sleep(10) 
 
 if __name__ == '__main__':
-    seed1 = str(sys.argv[1])
-    seed2 = str(sys.argv[2])
-    seed3 = str(sys.argv[3])
-    seed4 = str(sys.argv[4])
-    seed5 = str(sys.argv[5])
-    seed6 = str(sys.argv[6])
-    seed7 = str(sys.argv[7])
-    seed8 = str(sys.argv[8])
-    seed9 = str(sys.argv[9])
-    seed10 = str(sys.argv[10])
-    seed11 = str(sys.argv[11])
-    seed12 = str(sys.argv[12])
-    seed = "{} {} {} {} {} {} {} {} {} {} {} {}".format(seed1,seed2,seed3,seed4,seed5,seed6,seed7,seed8,seed9,seed10,seed11,seed12)
-    password  = str(sys.argv[13])
-
+    # seed1 = str(sys.argv[1])
+    # seed2 = str(sys.argv[2])
+    # seed3 = str(sys.argv[3])
+    # seed4 = str(sys.argv[4])
+    # seed5 = str(sys.argv[5])
+    # seed6 = str(sys.argv[6])
+    # seed7 = str(sys.argv[7])
+    # seed8 = str(sys.argv[8])
+    # seed9 = str(sys.argv[9])
+    # seed10 = str(sys.argv[10])
+    # seed11 = str(sys.argv[11])
+    # seed12 = str(sys.argv[12])
+    # seed = "{} {} {} {} {} {} {} {} {} {} {} {}".format(seed1,seed2,seed3,seed4,seed5,seed6,seed7,seed8,seed9,seed10,seed11,seed12)
+    # password  = str(sys.argv[13])
+    seed = "napkin hello convince elite boss crystal relax joy spoil fragile pattern brown"
+    password = "Gritec.1234"
     uploadFiles(251, 4750,seed, password)
 
 
