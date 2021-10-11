@@ -12,9 +12,11 @@ import json
 attributlist = []
 attributdict = {} 
 data = 0
+driver = 0
 def uploadFiles(startItemId, count, mnemonicString, walletPwd):
     statisticCreator()
     global attributdict
+    global driver
     print(attributdict)
 
     extension_path='./10.2.0_0.crx'
@@ -40,8 +42,7 @@ def uploadFiles(startItemId, count, mnemonicString, walletPwd):
     for _data in data: # Iteration over all items in JSON
         time.sleep(4)
         createButtonXpath = '//*[@id="__next"]/div[1]/div[1]/nav/ul/div[1]/li[4]/a'
-        wait.until(ExpectedConditions.presence_of_element_located(
-        (By.XPATH, createButtonXpath)))
+        wait.until(ExpectedConditions.presence_of_element_located((By.XPATH, createButtonXpath)))
         createPage = driver.find_element_by_xpath(createButtonXpath)
         createPage.click()
 
@@ -101,6 +102,7 @@ def uploadFiles(startItemId, count, mnemonicString, walletPwd):
             wait.until(ExpectedConditions.presence_of_element_located((By.XPATH, '//button[normalize-space()="Add more"]')))
             collectionAddPropButton = driver.find_element_by_xpath('//button[normalize-space()="Add more"]')
             collectionAddPropButton.click()             
+        time.sleep(2)
         propSave = driver.find_element_by_xpath('/html/body/div[{}]/div/div/div/footer/button'.format(propDivNum))
         propSave.click()    
         time.sleep(2)   
@@ -108,9 +110,54 @@ def uploadFiles(startItemId, count, mnemonicString, walletPwd):
         createNFT.click()
         time.sleep(10)   
         closeCreateModal = driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[2]/button')
-        closeCreateModal.click()              
+        closeCreateModal.click()  
+        imageSaler()            
     while(True):{}
 
+def imageSaler():
+    global driver
+    time.sleep(1)
+    sellButtonXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div/div/span[2]/a')
+    sellButtonXpath.click()
+    time.sleep(2)
+    timedAuctionButtonXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div[3]/div/div[2]/div/div/form/div/div/div[2]/button[2]')
+    timedAuctionButtonXpath.click()
+
+    bidderMethodInputXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div[3]/div/div[2]/div/div/form/div[2]/div/div[2]/input')
+    bidderMethodInputXpath.send_keys("Sell to highest bidder")
+
+    amountValueInputXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div[3]/div/div[2]/div/div/form/div[3]/div/div[2]/div/div/div[2]/input')
+    amountValueInputXpath.send_keys("0.02")
+
+    driver.execute_script("window.scrollTo(0, 0)")  
+    time.sleep(0.5)
+    moreOptionButtonXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div[3]/div/div[2]/div/div/form/button')
+    moreOptionButtonXpath.click()    
+
+    reservePriceButtonXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div[3]/div/div[2]/div/div/form/div[5]/div/div/div/label/div/div/label/input')
+    reservePriceButtonXpath.click()  
+
+    time.sleep(0.5)
+    reservePriceInputXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div[3]/div/div[2]/div/div/form/div[5]/div/div/div[2]/div/div/div[2]/input')
+    reservePriceInputXpath.send_keys("1.0")
+
+    driver.execute_script("window.scrollTo(0, 600)")     
+    time.sleep(4) 
+    completeListingButtonXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div[3]/div/div[2]/div/div/form/div[7]/button')
+    completeListingButtonXpath.click()
+
+    time.sleep(20)
+    tabs2 = driver.window_handles
+    driver.switch_to.window(tabs2[2]) 
+
+    sign = driver.find_element_by_xpath('//*[@id="app-content"]/div/div[2]/div/div[3]/button[2]')
+    sign.click()    
+
+    time.sleep(20)   
+    tabs2 = driver.window_handles
+    driver.switch_to.window(tabs2[1])     
+    closeCreateModal = driver.find_element_by_xpath('/html/body/div[4]/div/div/div/div/button')
+    closeCreateModal.click()      
 
 def statisticCreator():
     global attributdict
@@ -205,20 +252,20 @@ def signIntoMeta(driver, wait, mnemonicString, walletPwd):
     time.sleep(10) 
 
 if __name__ == '__main__':
-    # seed1 = str(sys.argv[1])
-    # seed2 = str(sys.argv[2])
-    # seed3 = str(sys.argv[3])
-    # seed4 = str(sys.argv[4])
-    # seed5 = str(sys.argv[5])
-    # seed6 = str(sys.argv[6])
-    # seed7 = str(sys.argv[7])
-    # seed8 = str(sys.argv[8])
-    # seed9 = str(sys.argv[9])
-    # seed10 = str(sys.argv[10])
-    # seed11 = str(sys.argv[11])
-    # seed12 = str(sys.argv[12])
-    # seed = "{} {} {} {} {} {} {} {} {} {} {} {}".format(seed1,seed2,seed3,seed4,seed5,seed6,seed7,seed8,seed9,seed10,seed11,seed12)
-    # password  = str(sys.argv[13])
+    seed1 = str(sys.argv[1])
+    seed2 = str(sys.argv[2])
+    seed3 = str(sys.argv[3])
+    seed4 = str(sys.argv[4])
+    seed5 = str(sys.argv[5])
+    seed6 = str(sys.argv[6])
+    seed7 = str(sys.argv[7])
+    seed8 = str(sys.argv[8])
+    seed9 = str(sys.argv[9])
+    seed10 = str(sys.argv[10])
+    seed11 = str(sys.argv[11])
+    seed12 = str(sys.argv[12])
+    seed = "{} {} {} {} {} {} {} {} {} {} {} {}".format(seed1,seed2,seed3,seed4,seed5,seed6,seed7,seed8,seed9,seed10,seed11,seed12)
+    password  = str(sys.argv[13])
 
     uploadFiles(251, 4750,seed, password)
 
