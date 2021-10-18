@@ -8,30 +8,44 @@ import time
 import sys
 import os
 import json
+from undetected_chromedriver.options import ChromeOptions
+import undetected_chromedriver.v2 as uc
 
 attributlist = []
 attributdict = {} 
 data = 0
 driver = 0
-def uploadFiles(startItemId, count, mnemonicString, walletPwd):
+
+def uploadFiles(startitem, enditem, mnemonicString, walletPwd):
     statisticCreator()
     global attributdict
     global driver
 
+#------------------------
+    # options = uc.ChromeOptions()
+
+    # extension_path='./10.2.0_0.crx'
+    # options.user_data_dir = "c:\\temp\\profile"
+    # options.add_extension(extension_path)
+    # options.add_argument('--user-data-dir=c:\\temp\\profile2')
+    # options.add_argument('--no-first-run --no-service-autorun --password-store=basic')
+    # driver = uc.Chrome(executable_path='./chromedriver',options=options)
+    # with driver:
+    #     driver.get('https://opensea.io/asset/create')  
+#------------------------
+
+    
     extension_path='./10.2.0_0.crx'
     opt = webdriver.ChromeOptions()
     opt.add_extension(extension_path)
-
     driver = webdriver.Chrome(executable_path='./chromedriver', chrome_options=opt)
-
     wait = WebDriverWait(driver, 60)
     url = 'https://opensea.io/asset/create'
-    collName = 'Mysterious Capricorn pixel art'
     driver.get(url)
-    time.sleep(0.5)
+
+    collName = 'Mysterious Capricorn pixel art'
+    time.sleep(2.5)
     signIntoMeta(driver, wait, mnemonicString, walletPwd)
-    startitem = 322
-    enditem = 500
     tabs2 = driver.window_handles
     driver.switch_to.window(tabs2[1]) 
 
@@ -42,7 +56,6 @@ def uploadFiles(startItemId, count, mnemonicString, walletPwd):
             wait.until(ExpectedConditions.presence_of_element_located((By.XPATH, createButtonXpath)))
             createPage = driver.find_element_by_xpath(createButtonXpath)
             createPage.click()
-
             #upload image       
             filePath = _data['image'] 
             wait.until(ExpectedConditions.presence_of_element_located((By.XPATH, '//*[@id="media"]')))
@@ -109,7 +122,7 @@ def uploadFiles(startItemId, count, mnemonicString, walletPwd):
                 wait.until(ExpectedConditions.presence_of_element_located((By.XPATH, '//button[normalize-space()="Add more"]')))
                 collectionAddPropButton = driver.find_element_by_xpath('//button[normalize-space()="Add more"]')
                 collectionAddPropButton.click()             
-            time.sleep(2)
+            time.sleep(5)
             propSave = driver.find_element_by_xpath('/html/body/div[{}]/div/div/div/footer/button'.format(propDivNum))
             propSave.click()    
             time.sleep(2)      
@@ -117,7 +130,7 @@ def uploadFiles(startItemId, count, mnemonicString, walletPwd):
             time.sleep(2) 
             createNFT = driver.find_element_by_xpath('//*[@id="__next"]/div[1]/main/div/div/section/div/form/div/div[1]/span/button')
             createNFT.click()
-            time.sleep(15)   
+            time.sleep(20)   
             closeCreateModal = driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[2]/button')
             closeCreateModal.click()  
             imageSaler()      
@@ -137,7 +150,7 @@ def imageSaler():
     # fixPriceButtonXpath.click()
 
     amountValueInputXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div[3]/div/div[2]/div/div/form/div[2]/div/div[2]/div/div/div[2]/input')
-    amountValueInputXpath.send_keys("0.04")
+    amountValueInputXpath.send_keys("0.1")
 
     #Auction
     # timedAuctionButtonXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div[3]/div/div[2]/div/div/form/div/div/div[2]/button[2]')
@@ -168,14 +181,14 @@ def imageSaler():
     completeListingButtonXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div[3]/div/div[2]/div/div/form/div[5]/button')
     completeListingButtonXpath.click()
 
-    time.sleep(20)
+    time.sleep(10)
     tabs2 = driver.window_handles
     driver.switch_to.window(tabs2[2]) 
 
     sign = driver.find_element_by_xpath('//*[@id="app-content"]/div/div[2]/div/div[3]/button[2]')
     sign.click()    
 
-    time.sleep(8)   
+    time.sleep(15)   
     tabs2 = driver.window_handles
     driver.switch_to.window(tabs2[1])     
     closeCreateModal = driver.find_element_by_xpath('/html/body/div[4]/div/div/div/div/button')
@@ -259,7 +272,7 @@ def signIntoMeta(driver, wait, mnemonicString, walletPwd):
 
     connect = driver.find_element_by_xpath('//*[@id="app-content"]/div/div[2]/div/div[2]/div[2]/div[2]/footer/button[2]')
     connect.click()
-    time.sleep(10)
+    time.sleep(15)
 
     tabs2 = driver.window_handles
     driver.switch_to.window(tabs2[2]) 
@@ -269,22 +282,8 @@ def signIntoMeta(driver, wait, mnemonicString, walletPwd):
     time.sleep(10) 
 
 if __name__ == '__main__':
-    seed1 = str(sys.argv[1])
-    seed2 = str(sys.argv[2])
-    seed3 = str(sys.argv[3])
-    seed4 = str(sys.argv[4])
-    seed5 = str(sys.argv[5])
-    seed6 = str(sys.argv[6])
-    seed7 = str(sys.argv[7])
-    seed8 = str(sys.argv[8])
-    seed9 = str(sys.argv[9])
-    seed10 = str(sys.argv[10])
-    seed11 = str(sys.argv[11])
-    seed12 = str(sys.argv[12])
-    seed = "{} {} {} {} {} {} {} {} {} {} {} {}".format(seed1,seed2,seed3,seed4,seed5,seed6,seed7,seed8,seed9,seed10,seed11,seed12)
-    password  = str(sys.argv[13])
-
-
-    uploadFiles(251, 4750,seed, password)
-
-
+    print("Key: ")
+    seed = input()
+    print("Password: ")
+    password = input()    
+    uploadFiles(1569, 2000,seed, password)
