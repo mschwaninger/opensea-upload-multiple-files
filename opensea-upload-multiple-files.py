@@ -122,7 +122,7 @@ def uploadFiles(startitem, enditem, mnemonicString, walletPwd):
                 wait.until(ExpectedConditions.presence_of_element_located((By.XPATH, '//button[normalize-space()="Add more"]')))
                 collectionAddPropButton = driver.find_element_by_xpath('//button[normalize-space()="Add more"]')
                 collectionAddPropButton.click()             
-            time.sleep(5)
+            time.sleep(2)
             propSave = driver.find_element_by_xpath('/html/body/div[{}]/div/div/div/footer/button'.format(propDivNum))
             propSave.click()    
             time.sleep(2)      
@@ -130,16 +130,17 @@ def uploadFiles(startitem, enditem, mnemonicString, walletPwd):
             time.sleep(2) 
             createNFT = driver.find_element_by_xpath('//*[@id="__next"]/div[1]/main/div/div/section/div/form/div/div[1]/span/button')
             createNFT.click()
-            time.sleep(20)   
+            time.sleep(8)   
             closeCreateModal = driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[2]/button')
             closeCreateModal.click()  
             imageSaler()      
+            time.sleep(1)  
             print('complete:    ----> '+_data['name'] )               
     while(True):{}
 
 def imageSaler():
     global driver
-    time.sleep(1)
+    time.sleep(4)
     sellButtonXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div/div/span[2]/a')
     sellButtonXpath.click()
     time.sleep(5)
@@ -150,7 +151,7 @@ def imageSaler():
     # fixPriceButtonXpath.click()
 
     amountValueInputXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div[3]/div/div[2]/div/div/form/div[2]/div/div[2]/div/div/div[2]/input')
-    amountValueInputXpath.send_keys("0.1")
+    amountValueInputXpath.send_keys("0.0001")
 
     #Auction
     # timedAuctionButtonXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div[3]/div/div[2]/div/div/form/div/div/div[2]/button[2]')
@@ -181,14 +182,14 @@ def imageSaler():
     completeListingButtonXpath = driver.find_element_by_xpath('/html/body/div/div/main/div/div/div[3]/div/div[2]/div/div/form/div[5]/button')
     completeListingButtonXpath.click()
 
-    time.sleep(10)
+    time.sleep(15)
     tabs2 = driver.window_handles
     driver.switch_to.window(tabs2[2]) 
 
     sign = driver.find_element_by_xpath('//*[@id="app-content"]/div/div[2]/div/div[3]/button[2]')
     sign.click()    
 
-    time.sleep(15)   
+    time.sleep(8)   
     tabs2 = driver.window_handles
     driver.switch_to.window(tabs2[1])     
     closeCreateModal = driver.find_element_by_xpath('/html/body/div[4]/div/div/div/div/button')
@@ -236,7 +237,7 @@ def signIntoMeta(driver, wait, mnemonicString, walletPwd):
 
     submit = driver.find_element_by_xpath('//*[@id="app-content"]/div/div[2]/div/div/form/button')
     submit.click()
-    time.sleep(8)    
+    time.sleep(5)    
 
     #alles erledigt button
     alldone = driver.find_element_by_xpath('//*[@id="app-content"]/div/div[2]/div/div/button')
@@ -272,18 +273,18 @@ def signIntoMeta(driver, wait, mnemonicString, walletPwd):
 
     connect = driver.find_element_by_xpath('//*[@id="app-content"]/div/div[2]/div/div[2]/div[2]/div[2]/footer/button[2]')
     connect.click()
-    time.sleep(15)
+    time.sleep(60)
 
     tabs2 = driver.window_handles
     driver.switch_to.window(tabs2[2]) 
     time.sleep(4)
     sign = driver.find_element_by_xpath('//*[@id="app-content"]/div/div[2]/div/div[3]/button[2]')
     sign.click()
-    time.sleep(10) 
+    time.sleep(5) 
 
 if __name__ == '__main__':
     print("Key: ")
     seed = input()
     print("Password: ")
     password = input()    
-    uploadFiles(1569, 2000,seed, password)
+    uploadFiles(2, 2,seed, password)
